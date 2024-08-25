@@ -105,6 +105,8 @@ let joinStreams = async () => {
         document.getElementById('user-streams').insertAdjacentHTML('beforeend', videoPlayer);
         localTracks.videoTrack.play(`stream-${config.uid}`);
         await client.publish([localTracks.audioTrack, localTracks.videoTrack]);
+
+        console.log('Local tracks published:', localTracks);
     } catch (error) {
         console.error('Error joining streams:', error);
     }
@@ -117,7 +119,7 @@ let handleUserLeft = async (user) => {
 
 let handleUserJoined = async (user, mediaType) => {
     try {
-        console.log('User has joined our stream');
+        console.log('User has joined our stream:', user);
         remoteTracks[user.uid] = user;
 
         await client.subscribe(user, mediaType);
@@ -133,6 +135,8 @@ let handleUserJoined = async (user, mediaType) => {
         if (mediaType === 'audio') {
             user.audioTrack.play();
         }
+
+        console.log('Remote user tracks:', remoteTracks);
     } catch (error) {
         console.error('Error handling user join:', error);
     }
